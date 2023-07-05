@@ -1,0 +1,66 @@
+﻿@model IEnumerable<BusTripSummary>
+
+<h1>Otobüs Seferleri</h1>
+
+<div class="row">
+    <div class="col-12 col-md-8">
+
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success" id="success_message">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+
+        <div class="text-end mb-2">
+            <a asp-controller="BusTrip" asp-action="Create" class="btn btn-primary btn-sm">Yeni ekle</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Kalkış</th>
+                    <th>Varış</th>
+                    <th>Tarih</th>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Fiyat</th>
+                  
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var busTrip in Model)
+                {
+                    <tr>
+                        <td>@busTrip.Id</td>
+                        <td>@busTrip.DepartureName</td>
+                        <td>@busTrip.ArrivalName</td>
+                        <td>@busTrip.Date</td>
+                        <td>@busTrip.VehicleMakeName</td>
+                        <td>@busTrip.VehicleModelName</td>
+                        <td>@busTrip.Price</td>
+                        <td>
+                            <a asp-controller="Ticket" asp-action="TicketsOfBusTrip" asp-route-busTripId="@busTrip.Id">Bilet Al</a>
+                            <a asp-controller="Ticket" asp-action="TicketsList" asp-route-busTripId="@busTrip.Id">Bilet Listesi</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        let successMessage = $('#success_message');
+
+        if (successMessage.length) {
+            setTimeout(function () {
+                successMessage.hide();
+            }, 3000);
+        }
+    </script>
+
+}

@@ -1,0 +1,89 @@
+﻿@model BusTripDetails
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bilet Listesi</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bilet Listesi - @Model.BusTripName</h1>
+
+    <h4>Aracın Bilgileri: @Model.VehicleInfo</h4>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Yolcu Numarası</th>
+            <th>Yolcu Adı</th>
+            <th>Yolcu Soyadı</th>
+            <th>Koltuk Numarası</th>
+            <th>Ücret</th>
+        </tr>
+        @foreach (var ticket in Model.Tickets)
+        {
+            <tr>
+                <td>@ticket.Id</td>
+                <td>@ticket.CustomerIdentityNumber</td>
+                <td>@ticket.CustomerName</td>
+                <td>@ticket.CustomerSurname</td>
+                <td>@ticket.SeatNumber</td>
+                <td>@ticket.Price</td>
+                <td>
+                    @*<button onclick="printTicket('@ticket.TicketNumber')">Bileti Yazdır</button>*@
+                    <a asp-controller="BusTrip" asp-action="GeneratePdfs" asp-route-id="@ticket.Id">Bileti Yazdır</a>
+                   @* <button id="generatePdfButton">Generate PDF</button>*@
+                </td>
+            </tr>
+           
+        }
+    </table>
+
+
+
+@*    <script>
+        function printTicket(ticketNumber) {
+            var pdfPath = "/Ticket/GeneratePdf?ticketNumber=" + ticketNumber;
+
+            // PDF'yi yeni bir pencerede aç
+            var win = window.open(pdfPath, "_blank");
+            win.onload = function () {
+                win.print();
+            };
+        }
+    </script>*@
+@*    <script>
+        document.getElementById("generatePdfButton").addEventListener("click", function () {
+            var busTrip = @Html.Raw(Json.Serialize(Model));
+            var data = JSON.stringify(busTrip);
+
+            fetch("/Ticket/GeneratePdf", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: data
+            })
+                .then(function (response) {
+                    return response.blob();
+                })
+                .then(function (blob) {
+                    var url = URL.createObjectURL(blob);
+                    window.open(url);
+                });
+        });
+    </script>*@
+</body>
+</html>
